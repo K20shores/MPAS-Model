@@ -6,7 +6,7 @@ endif
 
 all:
 	./../tools/manage_externals/checkout_externals --externals ./../Externals.cfg
-	$(MAKE) lookup_tables core_physics_init core_physics_mmm core_UGWP core_physics_wrf core_physics_noahmp core_physics
+	$(MAKE) lookup_tables core_physics_init core_physics_mmm core_UGWP core_physics_wrf core_physics_noahmp core_physics core_mpas_musica
 
 dummy:
 	echo "****** compiling physics ******"
@@ -70,6 +70,9 @@ core_physics_noahmp:
 	(cd physics_noahmp/utility; $(MAKE) all COREDEF="$(COREDEF)")
 	(cd physics_noahmp/src; $(MAKE) all COREDEF="$(COREDEF)")
 	(cd physics_noahmp/drivers/mpas; $(MAKE) all COREDEF="$(COREDEF)")
+
+core_mpas_musica:
+	(cd mpas_musica; $(MAKE) all COREDEF="$(COREDEF)")
 
 core_physics_init: $(OBJS_init)
 
