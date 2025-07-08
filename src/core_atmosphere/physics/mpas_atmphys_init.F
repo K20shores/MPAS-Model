@@ -395,7 +395,7 @@ use mpas_stream_manager
 
 !initialization of MUSICA chemistry:
 if(config_musica_scheme .ne. 'off') &
-    call init_musica(dminfo,configs,mesh,state,time_lev,sfc_input,diag_physics)
+    call init_musica()
 
 !initialization of PBL processes:
  if(config_pbl_scheme .ne. 'off') call init_pbl(configs)
