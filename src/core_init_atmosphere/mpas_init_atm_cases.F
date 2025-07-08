@@ -260,9 +260,9 @@ module init_atm_cases
             call init_atm_case_gfs(block_ptr, mesh, nCells, nEdges, nVertLevels, fg, state, &
                                    diag, diag_physics, block_ptr % dimensions, block_ptr % configs)
 
-! rkumar_start_chem_add
+#ifdef DO_CHEMISTRY
             call init_chem(mesh, state)
-! rkumar_end_chem_add
+#endif
 
             if (config_met_interp) then
                call init_atm_thompson_aerosols(block_ptr, mesh, block_ptr % configs, diag, state)
