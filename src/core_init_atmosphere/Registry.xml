@@ -320,6 +320,15 @@
                      possible_values="Positive real values"/>
         </nml_record>
 
+        <nml_record name="chemistry" in_defaults="true">
+
+                <nml_option name="config_init_test_species"         type="logical"       default_value="false"
+                     units="-"
+                     description="Whether to initialize chemistry test species"
+                     possible_values="true or false"/>
+
+        </nml_record>
+
         <nml_record name="io" in_defaults="true">
 
                 <nml_option name="config_pio_num_iotasks" type="integer" default_value="0"
@@ -376,6 +385,7 @@
                 <package name="first_guess_field" description="3-d atmospheric or land-surface fields on first-guess levels"/>
                 <package name="mp_thompson_aers_in" description="initialization of GOCART-based Thompson water- and ice-friendly aerosols"/>
                 <package name="noahmp" description="Whether to process, read, and write static fields only required by Noah-MP"/>
+                <package name="test_chem" description="Active iff we are providing initial conditions for chemistry test species" active_when="config_init_test_species"/>
         </packages>
 
 
@@ -1173,13 +1183,16 @@
                              packages="mp_thompson_aers_in"/>
 
                         <var name="o3" array_group="chem" units="ppmv"
-                             description="ozone mixing ratio"/>
+                             description="ozone mixing ratio"
+                             packages="test_chem"/>
 
                         <var name="no" array_group="chem" units="ppmv"
-                             description="no mixing ratio"/>
+                             description="no mixing ratio"
+                             packages="test_chem"/>
 
                         <var name="no2" array_group="chem" units="ppmv"
-                             description="no2 mixing ratio"/>
+                             description="no2 mixing ratio"
+                             packages="test_chem"/>
                 </var_array>
 
                 <!-- Climatology for ocean mixed-layer depth -->
