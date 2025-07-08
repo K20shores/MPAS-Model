@@ -690,8 +690,8 @@ ifeq "$(shell echo $(MUSICA) | tr '[:upper:]' '[:lower:]')" "true"
 ifeq ($(shell pkg-config --exists musica-fortran && echo yes || echo no), no)
 $(error "musica-fortran package is not installed. Please install it to proceed.")
 endif
-	FCINCLUDES += $(shell pkg-config --cflags musica-fortran)
-	LIBS += $(shell pkg-config --libs musica-fortran)
+	MUSICA_FCINCLUDES += $(shell pkg-config --cflags musica-fortran)
+	MUSICA_LIBS += $(shell pkg-config --libs musica-fortran)
 	MUSICA_FFLAGS = -DMPAS_USE_MUSICA
 endif
 
@@ -1513,6 +1513,7 @@ mpas_main: $(MAIN_DEPS)
 	@echo $(PARALLEL_MESSAGE)
 	@echo $(MPI_F08_MESSAGE)
 	@echo $(PAPI_MESSAGE)
+	@echo $(CHEMISTRY_MESSAGE)
 	@echo $(TAU_MESSAGE)
 	@echo $(OPENMP_MESSAGE)
 	@echo $(OPENMP_OFFLOAD_MESSAGE)
