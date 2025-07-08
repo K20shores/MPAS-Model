@@ -685,6 +685,16 @@ CPPINCLUDES =
 FCINCLUDES =
 LIBS =
 
+# Optional MUSICA support for chemistry
+ifeq "$(shell echo $(MUSICA) | tr '[:upper:]' '[:lower:]')" "true"
+ifeq ($(shell pkg-config --exists musica-fortran && echo yes || echo no), no)
+$(error "musica-fortran package is not installed. Please install it to proceed.")
+endif
+	FCINCLUDES += $(shell pkg-config --cflags musica-fortran)
+	LIBS += $(shell pkg-config --libs musica-fortran)
+	MUSICA_FFLAGS = -DMPAS_USE_MUSICA
+endif
+
 ifneq "$(PIO)" ""
 #
 # Regardless of PIO library version, look for a lib subdirectory of PIO path
@@ -695,7 +705,7 @@ ifneq ($(wildcard $(PIO)/lib), )
 else
 	PIO_LIB = $(PIO)
 endif
-LIBS = -L$(PIO_LIB)
+LIBS += -L$(PIO_LIB)
 
 #
 # Regardless of PIO library version, look for an include subdirectory of PIO path
