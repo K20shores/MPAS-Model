@@ -1,5 +1,11 @@
 module mpas_runtime_vars
 
+    implicit none
+
+    private
+
+    public :: mpas_var, mpas_var_array
+
     type mpas_var
         character(len=64) :: name = ''
         character(len=64) :: units = '-'
@@ -27,8 +33,24 @@ contains
         class (mpas_var_array), intent(inout) :: self
         type (mpas_var), intent(in) :: constituent
 
+        logical :: expected_species
 
         write(0,*) 'Adding constituent '//trim(constituent % name)
+
+        expected_species = .false.
+        if (constituent % name == 'o3') then
+            expected_species = .true.
+        endif
+        if (constituent % name == 'no') then
+            expected_species = .true.
+        endif
+        if (constituent % name == 'no2') then
+            expected_species = .true.
+        endif
+
+        if (.not. expected_species) then
+            write(0, *) 'This species was NOT expected'
+        endif
 
     end subroutine add_constituent
 

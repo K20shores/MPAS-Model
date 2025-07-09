@@ -378,6 +378,8 @@ module atm_core
       use mpas_atmphys_init
       use mpas_atmphys_manager
 #endif
+      use mpas_atm_chemistry, only : init_chemistry
+      use mpas_runtime_vars, only: mpas_var_array
 
       implicit none
    
@@ -407,6 +409,7 @@ module atm_core
       real (kind=RKIND), dimension(:), pointer :: areaTriangle, invAreaTriangle
       integer, pointer :: nCells_ptr, nEdges_ptr, nVertices_ptr, nVertLevels_ptr, nEdgesSolve
       integer :: nCells, nEdges, nVertices, nVertLevels
+      integer, pointer :: nCellsSolve
       integer :: thread
       character(len=StrKIND), pointer :: mminlu
 
@@ -420,6 +423,7 @@ module atm_core
 
 
       logical, pointer :: config_do_restart, config_do_DAcycling
+      type(mpas_var_array) :: chemical_species
 
       call atm_compute_signs(mesh)
    
@@ -580,6 +584,9 @@ module atm_core
                            diag_physics, diag_physics_noahmp, ngw_input, atm_input, sfc_input, output_noahmp)
       endif
 #endif
+
+      call mpas_pool_get_dimension(mesh, 'nCellsSolve', nCellsSolve)
+      call init_chemistry(chemical_species, block % configs, nCellsSolve)
    
       call atm_compute_mesh_scaling(mesh, block % configs)
 
@@ -987,6 +994,7 @@ module atm_core
       use mpas_atmphys_update
 #endif
       use mpas_atm_halos, only: exchange_halo_group
+      use mpas_atm_chemistry, only : step_chemistry
    
       implicit none
    
@@ -1019,6 +1027,8 @@ module atm_core
       endif
 #endif
 
+      call step_chemistry()
+
       call atm_timestep(domain, dt, currTime, itimestep, exchange_halo_group)
 
    end subroutine atm_do_timestep
@@ -1032,6 +1042,7 @@ module atm_core
       use mpas_atm_threading, only : mpas_atm_threading_finalize
       use atm_time_integration, only : mpas_atm_dynamics_finalize
       use mpas_atm_halos, only: atm_destroy_halo_groups
+      use mpas_atm_chemistry, only : finalize_chemistry
    
 #ifdef DO_PHYSICS
       use mpas_atmphys_finalize
@@ -1066,6 +1077,8 @@ module atm_core
             block_ptr => block_ptr%next
          end do
 #endif
+
+      call finalize_chemistry()
 
       !
       ! Destroy halo exchange groups
