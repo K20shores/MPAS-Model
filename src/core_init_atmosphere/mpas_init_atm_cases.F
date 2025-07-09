@@ -95,6 +95,8 @@ module init_atm_cases
       real (kind=RKIND), dimension(:), pointer :: ter
       integer, dimension(:), pointer :: bdyMaskCell
 
+      logical, pointer :: config_init_test_species
+
 
       call mpas_pool_get_config(domain % blocklist % configs, 'config_init_case', config_init_case)
 
@@ -179,6 +181,8 @@ module init_atm_cases
             call mpas_pool_get_config(block_ptr % configs, 'config_native_gwd_gsl_static', config_native_gwd_gsl_static)
             call mpas_pool_get_config(block_ptr % configs, 'config_met_interp', config_met_interp)
             call mpas_pool_get_config(block_ptr % configs, 'config_blend_bdy_terrain', config_blend_bdy_terrain)
+            nullify(config_init_test_species)
+            call mpas_pool_get_config(block_ptr % configs, 'config_init_test_species', config_init_test_species)
 
             call mpas_pool_get_subpool(block_ptr % structs, 'mesh', mesh)
             call mpas_pool_get_subpool(block_ptr % structs, 'fg', fg)
@@ -213,8 +217,10 @@ module init_atm_cases
                 end if
             end if
 
-            if (config_static_interp) then
-               call init_atm_static(mesh, block_ptr % dimensions, block_ptr % configs)
+            if (associated(config_init_test_species)) then
+               if (config_static_interp) then
+                  call init_atm_static(mesh, block_ptr % dimensions, block_ptr % configs)
+               end if
             end if
 
             if (config_native_gwd_static) then
@@ -260,9 +266,9 @@ module init_atm_cases
             call init_atm_case_gfs(block_ptr, mesh, nCells, nEdges, nVertLevels, fg, state, &
                                    diag, diag_physics, block_ptr % dimensions, block_ptr % configs)
 
-#ifdef DO_CHEMISTRY
-            call init_chem(mesh, state)
-#endif
+            if (config_init_test_species) then
+               call init_chem(mesh, state)
+            end if
 
             if (config_met_interp) then
                call init_atm_thompson_aerosols(block_ptr, mesh, block_ptr % configs, diag, state)
