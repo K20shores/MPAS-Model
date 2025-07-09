@@ -426,6 +426,8 @@
                 <package name="ugwp_orog_stream" description="Input stream (and variables) for UGWP orography"/>
                 <package name="ugwp_ngw_stream"  description="Input stream (and variables) for UGWP NGW lookup table"/>
                 <package name="ugwp_diags_stream" description="Output stream (and variables) for UGWP output diagnostics"/>
+                <package name="test_chem" description="Test chemical species for MICM development"
+                         active_when="len_trim(config_micm_file) > 0"/>
         </packages>
 
 
@@ -1685,13 +1687,16 @@
 
 		<!-- rkumar_chem_start -->
 			<var name="o3" array_group="chem" units="ppmv"
-			     description="ozone mixing ratio"/>
+			     description="ozone mixing ratio"
+                             packages="test_chem"/>
 
 			<var name="no" array_group="chem" units="ppmv"
-			     description="NO mixing ratio"/>
+			     description="NO mixing ratio"
+                             packages="test_chem"/>
 
 			<var name="no2" array_group="chem" units="ppmv"
-			     description="NO2 mixing ratio"/>
+			     description="NO2 mixing ratio"
+                             packages="test_chem"/>
 		<!-- rkumar_chem_end -->
                 </var_array>
 #endif
@@ -2047,13 +2052,16 @@
 
 		<!-- rkumar_chem_start -->
                         <var name="tend_o3" name_in_code="o3" array_group="chem" units="ppmv s^{-1}"
-				description="Tendency of o3 mixing ratios"/>
+                             description="Tendency of o3 mixing ratios"
+                             packages="test_chem"/>
 
                         <var name="tend_no" name_in_code="no" array_group="chem" units="ppmv s^{-1}"
-				description="Tendency of no mixing ratios"/>
+                             description="Tendency of no mixing ratios"
+                             packages="test_chem"/>
 
                         <var name="tend_no2" name_in_code="no2" array_group="chem" units="ppmv s^{-1}"
-				description="Tendency of no2 mixing ratios"/>
+                             description="Tendency of no2 mixing ratios"
+                             packages="test_chem"/>
 		<!-- rkumar_chem_end -->
                 </var_array>
 #endif
