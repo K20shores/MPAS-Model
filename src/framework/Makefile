@@ -37,7 +37,8 @@ OBJS = mpas_kind_types.o \
        mpas_halo.o \
        mpas_string_utils.o \
        mpas_stream_inquiry.o \
-       stream_inquiry.o
+       stream_inquiry.o \
+       mpas_runtime_vars.o
 
 all: framework $(DEPS)
 
